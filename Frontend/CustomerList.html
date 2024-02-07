@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Sign Works Customers</title>
+</head>
+<body style="font-family: arial">
+<h1>Customer List</h1>
+
+<table id="customerTable">
+	<tr><td>Date</td><td><input type="Date" id="date_recieved" placeholder="Choose a date"></td></tr>
+	<tr><td>Job No.</td><td><input type="text" id="job_no" placeholder="Enter number"></td></tr>
+	<tr><td>Client/Customer</td><td><input type="text" id="customer" placeholder="Enter customer name"></td></tr>
+	<tr><td>Contact Person</td><td><input type="text" id="contact_person" placeholder="Enter name"></td></tr>
+	<tr><td>Job Description</td><td><input type="text" id="job_description" style="height: 100px;" placeholder="Enter a string"></td></tr>
+	<tr><td>Price Amount</td><td><input type="text" id="price_amount" placeholder="Enter price"></td></tr>
+	<tr><td>Permit Status</td><td><input type="text" id="permit_status" placeholder="Enter a string"></td></tr>
+	<tr><td>Date Completed</td><td><input type="Date" id="date_completed" placeholder="Enter a date"></td></tr>
+	<tr><td>Invoice No.</td><td><input type="text" id="invoice_no" placeholder="Enter number"></td></tr>
+	<tr><td>Payment Method</td><td><input type="text" id="payment_method" placeholder="Enter a string"></td></tr>
+</table>
+
+<button onclick="upload_customer()">Upload Customer</button>
+
+<script>
+async function upload_customer()
+{
+	var date = document.getElementById('date_recieved').value;
+	var job_no = document.getElementById('job_no').value;
+	var customer = document.getElementById('customer').value;
+	var contact_person = document.getElementById('contact_person').value;
+	var job_description = document.getElementById('job_description').value;
+	var price_amount = document.getElementById('price_amount').value;
+	var permit_status = document.getElementById('permit_status').value;
+	var date_completed = document.getElementById('date_completed').value;
+	var invoice_no = document.getElementById('invoice_no').value;
+	var payment_method = document.getElementById('payment_method').value;
+	
+	var data = new FormData();
+	data.append('date', date);
+	data.append('job_no', job_no);
+	data.append('customer', customer);
+	data.append('contact_person', contact_person);
+	data.append('job_description', job_description);
+	data.append('price_amount', price_amount);
+	data.append('permit_status', permit_status);
+	data.append('date_completed', date_completed);
+	data.append('invoice_no', invoice_no);
+	data.append('payment_method', payment_method);
+	
+	try
+	{
+		console.log('Data to be sent', Array.from(data.entries()));
+		
+		const response = await fetch("http://127.0.0.1:8000/sign_works/entry_list/",
+		{
+			method: 'POST',
+			body: data,
+		});
+		
+		if (!response.ok)
+		{
+			const errorText = await response.text();
+			console.error('HTTP error details: ', response.Status, errorText)
+		}
+		
+		const responseData = await response.json();
+		console.log('Customer uploaded successfully!', responseData);
+		alert('Upload Successful!');
+	}
+	catch (error)
+	{
+		console.error('Error posting data:', error);
+		alert('Error uploading customer. Please try again.');
+	}
+}
+
+</script>
+</body>
+</html>
