@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Edit Customer Details</title>
+	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+</head>
+<body style="font-family: Arial; background-color: #F5F5DC;">
+	<h1 style="background-color: #ADD8E6;">Edit Customer Details</h1>
+	
+	<form id="editForm">
+		<label for="date"><b>Date:</b></label>
+		<input type="date" id="date"><br><br>
+		
+		<label for="jobNo"><b>Job No:</b></label>
+		<input type="text" id="jobNo"><br><br>
+		
+		<label for="customer"><b>Client:</b></label>
+		<input type="text" id="customer"><br><br>
+		
+		<label for="contact_person"><b>Contact Person:</b></label>
+		<input type="text" id="contact_person"><br><br>
+		
+		<label for="job_description"><b>Job Description:</b></label>
+		<input type="text" id="job_description"><br><br>
+		
+		<label for="price_amount"><b>Price Amount:</b></label>
+		<input type="text" id="price_amount"><br><br>
+		
+		<label for="permit_status"><b>Permit Status:</b></label>
+		<input type="text" id="permit_status"><br><br>
+		
+		<label for="date_completed"><b>Date Completed:</b></label>
+		<input type="date" id="date_completed"><br><br>
+		
+		<label for="invoice_no"><b>Invoice No:</b></label>
+		<input type="text" id="invoice_no"><br><br>
+		
+		<label for="payment_method"><b>Payment Method:</b></label>
+		<input type="text" id="payment_method"><br><br>
+		
+		<button type="submit"><b>Update Customer Details</b></button>
+	</form>
+	
+<script>
+// Retieve selected customer details from local storage
+const selectedCustomer = JSON.parse(localStorage.getItem('selectedCustomer'));
+
+//Fill form fields with selected customer Details
+document.getElementById('date').value = selectedCustomer.date;
+document.getElementById('jobNo').value = selectedCustomer.job_no
+document.getElementById('customer').value = selectedCustomer.customer;
+document.getElementById('contact_person').value = selectedCustomer.contact_person;
+document.getElementById('job_description').value = selectedCustomer.job_description;
+document.getElementById('price_amount').value = selectedCustomer.price_amount;
+document.getElementById('date_completed').value = selectedCustomer.date_completed;
+document.getElementById('invoice_no').value = selectedCustomer.invoice_no;
+document.getElementById('payment_method').value = selectedCustomer.payment_method;
+
+// Handle form submission
+document.getElementById('editForm').addEventListener('submit', async function(event) {
+	event.preventDefault(); //Prevent default form submission
+	
+	//const formData = new FormData(this);
+	const date = document.getElementById('date').value;
+	const jobNo = document.getElementById('jobNo').value;
+	const customer = document.getElementById('customer').value;
+	const contactPerson = document.getElementById('contact_person').value;
+	const jobDescription = document.getElementById('job_description').value;
+	const priceAmount = document.getElementById('price_amount').value;
+	const permitStatus = document.getElementById('permit_status').value;
+	const dateCompleted = document.getElementById('date_completed').value;
+	const invoiceNo = document.getElementById('invoice_no').value;
+	const paymentMethod = document.getElementById('payment_method').value;
+	
+	const data = {
+		job_no: jobNo,
+		date: date,
+		customer: customer,
+		contact_person: contactPerson,
+		job_description: jobDescription,
+		price_amount: priceAmount,
+		permit_status: permitStatus,
+		date_completed: dateCompleted,
+		invoice_no: invoiceNo,
+		payment_method: paymentMethod
+	};
+
+	
+	try {
+		const response = await fetch('http://127.0.0.1:8000/sign_works/customer_update/' + jobNo + '/', {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
+		
+		if (!response.ok) {
+			throw new Error('Failed to update customer details');
+		}
+		
+		//Redirect user back to CustomerList page after succesful Update
+		window.location.href = 'view_customers.html';
+		
+		const responseData = await response.json();
+		alert('Customer details updated successfully');
+	} catch (error) {
+		console.error('Error:', error);
+		alert('Failed to update customer details. Please try again.');
+	}
+});
+
+</script>
+</body>
+</html>
+		
+		

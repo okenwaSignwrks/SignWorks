@@ -3,21 +3,22 @@
 <head>
 	<meta charset="utf-8">
 	<title>Sign Works Customers</title>
+	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
 </head>
-<body style="font-family: arial">
-<h1>Customer List</h1>
+<body style="font-family: Arial; background-color: #F5F5DC;">
+<h1 style="background-color: #ADD8E6;">Insert Customer Information</h1>
 
 <table id="customerTable">
-	<tr><td>Date</td><td><input type="Date" id="date_recieved" placeholder="Choose a date"></td></tr>
-	<tr><td>Job No.</td><td><input type="text" id="job_no" placeholder="Enter number"></td></tr>
-	<tr><td>Client/Customer</td><td><input type="text" id="customer" placeholder="Enter customer name"></td></tr>
-	<tr><td>Contact Person</td><td><input type="text" id="contact_person" placeholder="Enter name"></td></tr>
-	<tr><td>Job Description</td><td><input type="text" id="job_description" style="height: 100px;" placeholder="Enter a string"></td></tr>
-	<tr><td>Price Amount</td><td><input type="text" id="price_amount" placeholder="Enter price"></td></tr>
-	<tr><td>Permit Status</td><td><input type="text" id="permit_status" placeholder="Enter a string"></td></tr>
-	<tr><td>Date Completed</td><td><input type="Date" id="date_completed" placeholder="Enter a date"></td></tr>
-	<tr><td>Invoice No.</td><td><input type="text" id="invoice_no" placeholder="Enter number"></td></tr>
-	<tr><td>Payment Method</td><td><input type="text" id="payment_method" placeholder="Enter a string"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Date</td><td><input type="Date" id="date_recieved" placeholder="Choose a date"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Job No.</td><td><input type="text" id="job_no" placeholder="Enter number"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Client/Customer</td><td><input type="text" id="customer" placeholder="Enter customer name"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Contact Person</td><td><input type="text" id="contact_person" placeholder="Enter name"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Job Description</td><td><input type="text" id="job_description" style="height: 100px;" placeholder="Enter a string"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Price Amount</td><td><input type="text" id="price_amount" placeholder="Enter price"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Permit Status</td><td><input type="text" id="permit_status" placeholder="Enter a string"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Date Completed</td><td><input type="Date" id="date_completed" placeholder="Enter a date"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Invoice No.</td><td><input type="text" id="invoice_no" placeholder="Enter number"></td></tr>
+	<tr><td style="background-color: #ADD8E6;">Payment Method</td><td><input type="text" id="payment_method" placeholder="Enter a string"></td></tr>
 </table>
 
 <button onclick="upload_customer()">Upload Customer</button>
@@ -67,6 +68,8 @@ async function upload_customer()
 		const responseData = await response.json();
 		console.log('Customer uploaded successfully!', responseData);
 		alert('Upload Successful!');
+		//const tableBody = document.getElementById('customerTable');
+		//tableBody.innerHTML = '';
 	}
 	catch (error)
 	{

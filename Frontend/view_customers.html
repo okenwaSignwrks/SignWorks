@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Client Directory</title>
+	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+</head>
+<body>
+
+<h1 style="background-color: #87CEFA;;">Client Directory</h1>
+
+<input type="text" id="searchInput" oninput="filterTable()" onkeyup="handleKeyPress(event)" placeholder="Search...">
+
+<table style="width:100%" border=2 id="joblistTable">
+<thead>
+	<tr>
+		<th style="background-color: yellow;">Date</th>
+		<th style="background-color: yellow;">Job No.</th>
+		<th style="background-color: yellow;">Client</th>
+		<th style="background-color: yellow;">Contact Person</th>
+		<th style="background-color: yellow;">Job Description</th>
+		<th style="background-color: yellow;">Price Amount</th>
+		<th style="background-color: yellow;">Permit Status</th>
+		<th style="background-color: yellow;">Date Completed</th>
+		<th style="background-color: yellow;">Invoice No.</th>
+		<th style="background-color: yellow;">Payment Method</th>
+	</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+<script>
+async function fetchData()
+{
+	try
+	{
+		const response = await fetch("http://127.0.0.1:8000/sign_works/customer_list/");
+		const responseData = await response.json();
+		
+		//Update table with fetched data
+		const tableBody = document.getElementById('tableBody');
+		responseData.forEach(jobs =>
+		{
+			const row = document.createElement('tr');
+			row.addEventListener('click', function()
+			{
+				selectCustomer(jobs);
+			});
+			row.insertCell(0).textContent = jobs.date;
+			row.insertCell(1).textContent = jobs.job_no;
+			row.insertCell(2).textContent = jobs.customer;
+			row.insertCell(3).textContent = jobs.contact_person;
+			row.insertCell(4).textContent = jobs.job_description;
+			row.insertCell(5).textContent = jobs.price_amount;
+			row.insertCell(6).textContent = jobs.permit_status;
+			row.insertCell(7).textContent = jobs.date_completed;
+			row.insertCell(8).textContent = jobs.invoice_no;
+			row.insertCell(9).textContent = jobs.payment_method;
+			tableBody.appendChild(row);
+		});
+	}
+	catch (error)
+	{
+		console.log('Error retrieving data:', error);
+	}
+}
+
+function filterTable()
+{
+	const input = document.getElementById('searchInput');
+	const filter = input.value.toUpperCase();
+	const table = document.getElementById('joblistTable');
+	const rows = table.getElementsByTagName('tr');
+	
+	for (let i = 1; i < rows.length; i++)
+	{
+		const cells = rows[i].getElementsByTagName('td');
+		let shouldShowRow = false;
+		
+		for (let j = 0; j < cells.length; j++)
+		{
+			const cellText = cells[j].textContent || cells[j].innerText;
+			
+			if (cellText.toUpperCase().indexOf(filter) > -1)
+			{
+				shouldShowRow = true;
+				break;
+			}
+		}
+		
+		rows[i].style.display = shouldShowRow ? '' : 'none';
+	}
+}
+
+function handleKeyPress(event)
+{
+	if (event.key == 'Enter')
+	{
+		filterTable();
+	}
+}
+
+
+function selectCustomer(customer)
+{
+	localStorage.setItem('selectedCustomer', JSON.stringify(customer));
+	window.location.href = 'customer_details.html';
+}
+
+
+
+
+
+fetchData();
+
+</script>
+</body>
+</html>
+			
