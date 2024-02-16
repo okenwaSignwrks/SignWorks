@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Application Status Details</title>
+	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Planning Application Details</h1>
+
+    <table id="statusDetails">
+        <!-- Customer details will be displayed here dynamically -->
+    </table>
+
+    <button onclick="redirectToEditPage()">Edit Status</button>
+
+    <script>
+        // Retrieve selected customer details from local storage
+        const selectedJob = JSON.parse(localStorage.getItem('selectedJob'));
+        const jobDetailsTable = document.getElementById('statusDetails');
+
+        // Function to exclude '_id' field and format column names
+        function formatColumnName(name) {
+            // Convert camelCase to Title Case
+            const formattedName = name.replace(/([A-Z])/g, ' $1').trim();
+            // Capitalize first letter
+            return formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+        }
+
+        // Display customer details in a vertical table format
+        for (const [key, value] of Object.entries(selectedJob)) {
+            // Exclude '_id' field
+            if (key !== 'id') {
+                const row = jobDetailsTable.insertRow();
+                const columnNameCell = row.insertCell(0);
+                const valueCell = row.insertCell(1);
+
+                columnNameCell.textContent = formatColumnName(key);
+                valueCell.textContent = value;
+            }
+        }
+
+        // Function to redirect to edit page
+        function redirectToEditPage() {
+            window.location.href = 'status_update.html';
+        }
+    </script>
+</body>
+</html>
