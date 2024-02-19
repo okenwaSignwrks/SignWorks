@@ -102,15 +102,15 @@ WSGI_APPLICATION = 'SignWorks_DB.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'djongo',
-        'CLIENT': {
-            'host': "mongodb://localhost:27017",
-            'name': 'SignWorks'
-        }
+    "default": {
+        "ENGINE": 'djongo',
+        "CLIENT": {
+            "host": "mongodb+srv://okenwaoke:okenwa@cluster0.zdivtwa.mongodb.net/?retryWrites=true&w=majority",
+            "name": "SignWorks",
+            "authMechanism": "SCRAM-SHA-1"  # Foratlasclouddb
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
