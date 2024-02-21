@@ -53,7 +53,7 @@ async function upload_customer()
 	{
 		console.log('Data to be sent', Array.from(data.entries()));
 		
-		const response = await fetch("http://3.15.180.127:8000/sign_works/entry_list/",
+		const response = await fetch("http://127.0.0.1:8000/sign_works/entry_list/",
 		{
 			method: 'POST',
 			body: data,
