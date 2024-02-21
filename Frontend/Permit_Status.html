@@ -70,7 +70,7 @@ async function uploadPermit()
 	
 	try
 	{
-		const response = await fetch("http://127.0.0.1:8000/sign_works/permit_status/",
+		const response = await fetch("http://3.15.180.127:8000/sign_works/permit_status/",
 		{
 			method: 'POST',
 			headers: {
@@ -103,7 +103,7 @@ async function fetchJobs()
 {
 	try
 	{
-		const response = await fetch("http://127.0.0.1:8000/sign_works/job_id/");
+		const response = await fetch("http://3.15.180.127:8000/sign_works/job_id/");
 		const jobs = await response.json();
 		const jobTable = document.getElementById('jobTable').getElementsByTagName('tbody')[0];
 		

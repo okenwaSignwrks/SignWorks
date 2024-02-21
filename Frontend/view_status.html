@@ -18,6 +18,7 @@
 		<th style="background-color: yellow;">Client</th>
 		<th style="background-color: yellow;">City</th>
 		<th style="background-color: yellow;">Date Submitted</th>
+		<th style="background-color: yellow;">Planning Department</th>
 		<th style="background-color: yellow;">Status</th>
 		<th style="background-color: yellow;">Date Approved</th>
 	</tr>
@@ -31,7 +32,7 @@ async function fetchData()
 {
 	try
 	{
-		const response = await fetch("http://127.0.0.1:8000/sign_works/status_view/");
+		const response = await fetch("http://3.15.180.127:8000/sign_works/plan_status_view/");
 		const responseData = await response.json();
 		
 		//Update table with fetched data
@@ -48,8 +49,9 @@ async function fetchData()
 			row.insertCell(1).textContent = status.client;
 			row.insertCell(2).textContent = status.city;
 			row.insertCell(3).textContent = status.date_submitted;
-			row.insertCell(4).textContent = status.status;
-			row.insertCell(5).textContent = status.date_approved;
+			row.insertCell(4).textContent = status.planning_dept
+			row.insertCell(5).textContent = status.status;
+			row.insertCell(6).textContent = status.date_approved;
 			tableBody.appendChild(row);
 		});
 	}

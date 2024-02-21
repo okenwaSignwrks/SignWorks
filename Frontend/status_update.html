@@ -74,7 +74,7 @@ document.getElementById('editForm').addEventListener('submit', async function(ev
 	};
 	
 	try {
-		const response = await fetch('http://127.0.0.1:8000/sign_works/status_update/' + jobNo + '/', {
+		const response = await fetch('http://3.15.180.127:8000/sign_works/status_update/' + jobNo + '/', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'

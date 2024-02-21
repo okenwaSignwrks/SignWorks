@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
-from .models import CustomerList, Plans, Permits
+from .models import CustomerList, Plans #Permits
 from .serializers import CustomerListSerializer, PlansSerializer
 
 @api_view(['GET'])
@@ -52,7 +52,7 @@ def plan_status(request):
 # To view the status page
 @api_view(['GET'])
 def plan_status_view(request):
-    status = Permits.objects.all()
+    status = Plans.objects.all()
     status_data = []
     for state in status:
         status_data.append({
