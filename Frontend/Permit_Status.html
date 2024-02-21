@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Add Permit</title>
+	<title>Add Plans</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
 </head>
 <body style="font-family: Arial; background-color: #F5F5DC;">
@@ -25,7 +25,7 @@
 	</tbody>
 </table>
 
-<button onclick="uploadPermit()">Upload Permit</button>
+<button onclick="uploadPermit()">Upload Plans</button>
 
 <script>
 async function uploadPermit()
@@ -70,7 +70,7 @@ async function uploadPermit()
 	
 	try
 	{
-		const response = await fetch("http://127.0.0.1:8000/sign_works/permit_status/",
+		const response = await fetch("http://127.0.0.1:8000/sign_works/plan_status/",
 		{
 			method: 'POST',
 			headers: {
