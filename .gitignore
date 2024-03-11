@@ -1,5 +1,6 @@
 # Ignore Drawings and Schemas Directory
 Drawings/
 Schemas/
+Applications/
 .idea/
 .$SignWorks.drawio.dtmp
