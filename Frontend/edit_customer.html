@@ -5,43 +5,50 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Edit Customer Details</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body style="font-family: Arial; background-color: #F5F5DC;">
-	<h1 style="background-color: #ADD8E6;">Edit Customer Details</h1>
+
+<body>
+	<header>
+		<h1>Edit Customer Details</h1>
+	</header>
 	
-	<form id="editForm">
-		<label for="date"><b>Date:</b></label>
-		<input type="date" id="date"><br><br>
-		
-		<label for="jobNo"><b>Job No:</b></label>
-		<input type="text" id="jobNo"><br><br>
-		
-		<label for="customer"><b>Client:</b></label>
-		<input type="text" id="customer"><br><br>
-		
-		<label for="contact_person"><b>Contact Person:</b></label>
-		<input type="text" id="contact_person"><br><br>
-		
-		<label for="job_description"><b>Job Description:</b></label>
-		<input type="text" id="job_description"><br><br>
-		
-		<label for="price_amount"><b>Price Amount:</b></label>
-		<input type="text" id="price_amount"><br><br>
-		
-		<label for="permit_status"><b>Permit Status:</b></label>
-		<input type="text" id="permit_status"><br><br>
-		
-		<label for="date_completed"><b>Date Completed:</b></label>
-		<input type="date" id="date_completed"><br><br>
-		
-		<label for="invoice_no"><b>Invoice No:</b></label>
-		<input type="text" id="invoice_no"><br><br>
-		
-		<label for="payment_method"><b>Payment Method:</b></label>
-		<input type="text" id="payment_method"><br><br>
-		
-		<button type="submit"><b>Update Customer Details</b></button>
-	</form>
+	<div class="edit">
+		<form id="editForm">
+			<label for="date"><b>Date:</b></label>
+			<input type="date" id="date"><br><br>
+			
+			<label for="jobNo"><b>Job No:</b></label>
+			<input type="text" id="jobNo"><br><br>
+			
+			<label for="customer"><b>Client:</b></label>
+			<input type="text" id="customer"><br><br>
+			
+			<label for="contact_person"><b>Contact Person:</b></label>
+			<input type="text" id="contact_person"><br><br>
+			
+			<label for="job_description"><b>Job Description:</b></label>
+			<input type="text" id="job_description"><br><br>
+			
+			<label for="price_amount"><b>Price Amount:</b></label>
+			<input type="text" id="price_amount"><br><br>
+			
+			<label for="permit_status"><b>Permit Status:</b></label>
+			<input type="text" id="permit_status"><br><br>
+			
+			<label for="date_completed"><b>Date Completed:</b></label>
+			<input type="date" id="date_completed"><br><br>
+			
+			<label for="invoice_no"><b>Invoice No:</b></label>
+			<input type="text" id="invoice_no"><br><br>
+			
+			<label for="payment_method"><b>Payment Method:</b></label>
+			<input type="text" id="payment_method"><br><br>
+			
+			<button type="submit"><b>Update Customer Details</b></button>
+		</form>
+	</div>
 	
 <script>
 // Retieve selected customer details from local storage
@@ -89,7 +96,7 @@ document.getElementById('editForm').addEventListener('submit', async function(ev
 
 	
 	try {
-		const response = await fetch('http://3.15.180.127:8000/sign_works/customer_update/' + jobNo + '/', {
+		const response = await fetch('http://127.0.0.1:8000/sign_works/customer_update/' + jobNo + '/', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'

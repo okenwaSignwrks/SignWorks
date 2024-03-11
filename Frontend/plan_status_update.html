@@ -5,34 +5,43 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Planning Application Status Modification</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body style="font-family: Arial; background-color: #F5F5DC;">
-	<h1 style="background-color: #ADD8E6;">Update Planning Application Status Details</h1>
+<body>
+	<header>
+		<h1>Update Planning Application Status Details</h1>
+	</header>
 	
-	<form id="editForm">
-		<label for="job_no"><b>Job No:</b></label>
-		<input type="text" id="job_no"><br><br>
-		
-		<label for="client"><b>Client:</b></label>
-		<input type="text" id="client"><br><br>
-		
-		<label for="city"><b>City:</b></label>
-		<input type="text" id="city"><br><br>
-		
-		<label for="date_submitted"><b>Date Submitted:</b></label>
-		<input type="date" id="date_submitted"><br><br>
-		
-		<label for="status"><b>Status:</b></label>
-		<select id="status">
-			<option value="Not Submitted">Not Submitted</option>
-			<option value="Pending">Pending</option>
-			<option value="Approved">Approved</option>
-		</select><br><br>
-		
-		<label for="date_approved"><b>Date Approved:</b></label>
-		<input type="date" id="date_approved"><br><br>
-		
-		<button type="submit">Update</button>
+	<div class="edit">
+		<form id="editForm">
+			<label for="job_no"><b>Job No:</b></label>
+			<input type="text" id="job_no"><br><br>
+			
+			<label for="client"><b>Client:</b></label>
+			<input type="text" id="client"><br><br>
+			
+			<label for="city"><b>City:</b></label>
+			<input type="text" id="city"><br><br>
+			
+			<label for="date_submitted"><b>Date Submitted:</b></label>
+			<input type="date" id="date_submitted"><br><br>
+			
+			<label for="status"><b>Status:</b></label>
+			<select id="status">
+				<option value="Not Submitted">Not Submitted</option>
+				<option value="Pending">Pending</option>
+				<option value="Approved">Approved</option>
+			</select><br><br>
+			
+			<label for="description" style="width: 250px;"><b>Description:</b></label>
+			<input type="text" id="description"><br><br>
+			
+			<label for="date_approved"><b>Date Approved:</b></label>
+			<input type="date" id="date_approved"><br><br>
+			
+			<button type="submit">Update</button>
+	</div>
 		
 <script>
 // Retrieve selected job details from local storage
@@ -44,6 +53,7 @@ document.getElementById('client').value = selectedJob.client;
 document.getElementById('city').value = selectedJob.city;
 document.getElementById('date_submitted').value = selectedJob.date_submitted;
 document.getElementById('status').value = selectedJob.status;
+document.getElementById('description').value = selectedJob.description;
 document.getElementById('date_approved').value = selectedJob.date_approved;
 
 //Handle form submission
@@ -55,6 +65,7 @@ document.getElementById('editForm').addEventListener('submit', async function(ev
 	const City = document.getElementById('city').value;
 	const dateSubmitted = document.getElementById('date_submitted').value;
 	const Status = document.getElementById('status').value;
+	const Description = document.getElementById('description').value;
 	let dateApproved = document.getElementById('date_approved').value;
 	
 	if (dateApproved.trim() === '') {
@@ -70,11 +81,12 @@ document.getElementById('editForm').addEventListener('submit', async function(ev
 		city: City,
 		date_submitted: dateSubmitted,
 		status: Status,
+		description: Description,
 		date_approved: dateApproved
 	};
 	
 	try {
-		const response = await fetch('http://3.15.180.127:8000/sign_works/status_update/' + jobNo + '/', {
+		const response = await fetch('http://127.0.0.1:8000/sign_works/plan_status_update/' + jobNo + '/', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -87,7 +99,7 @@ document.getElementById('editForm').addEventListener('submit', async function(ev
 		}
 		
 		// Redirect user back to Plan Staus page after successful Update
-		window.location.href = 'view_status.html';
+		window.location.href = 'view_plan_status.html';
 		
 		const responseData = await response.json();
 		alert('Plan status updated successfully!');

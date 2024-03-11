@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Add Plans</title>
+	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+	<header>
+		<h1>Manage Planning Application Status</h1>
+	</header>
+
+	<div class="search">
+		<input type="text" id="searchInput" oninput="filterTable()" onkeyup="handleKeyPress(event)" placeholder="Search...">
+		<span class="search-icon"><i class="fa fa-search"></i></span>
+	</div>
+
+	<div class="upload">	
+		<table id="jobTable">
+			<thead>
+				<tr>
+					<th style="background-color: #ADD8E6;">Job No.</th>
+					<th style="background-color: #ADD8E6;">Client</th>
+					<th style="background-color: #ADD8E6;">City</th>
+					<th style="background-color: #ADD8E6;">Date Submitted</th>
+					<th style="background-color: #ADD8E6;">Planning Department</th>
+					<th style="background-color: #ADD8E6;">Status</th>
+					<th style="background-color: #ADD8E6;">Description</th>
+					<th style="background-color: #ADD8E6;">Date Approved</th>
+					<th style="background-color: #ADD8E6;">Select</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Permit fields will be inserted here dynamically -->
+			</tbody>
+		</table>
+
+		<button type="button" onclick="uploadPermit()">Upload Plans</button>
+	</div>
+
+<script>
+async function uploadPermit()
+{
+	const permitData = [];
+	const jobTable = document.getElementById('jobTable');
+	const rows = jobTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+	let hasApproved = false; //Flag to check if any row has "Approved" Status
+	
+	for (let i = 0; i < rows.length; i++)
+	{
+		const checkbox = rows[i].querySelector('input[type="checkbox"]');
+		if (checkbox.checked)
+		{
+			const status = rows[i].cells[5].getElementsByTagName('select')[0].value;
+			
+			if (status === 'Approved') {
+				hasApproved = true; // Set the flag to true if any row has "Approved" Status
+			}
+			
+			const jobNo = rows[i].cells[0].textContent;
+			const client = rows[i].cells[1].textContent;
+			const city = rows[i].cells[2].getElementsByTagName('input')[0].value;
+			const dateSubmitted = rows[i].cells[3].getElementsByTagName('input')[0].value;
+			const planningDept = rows[i].cells[4].getElementsByTagName('input')[0].value;
+			const description = rows[i].cells[6].getElementsByTagName('input')[0].value;
+			let dateApproved = rows[i].cells[7].getElementsByTagName('input')[0].value;
+		
+			//Check if dataApproved is empty
+			if (dateApproved.trim() === '')
+			{
+				dateApproved = null;
+			}
+			else
+			{
+				dateApproved = new Date(dateApproved).toISOString().split('T')[0];
+				//const dateApproved = new Date(dateApprovedInput).toISOString().split('T')[0];
+			}
+		
+			permitData.push({
+				'job_no': jobNo,
+				'client': client,
+				'city': city,
+				'date_submitted': dateSubmitted,
+				'planning_dept': planningDept,
+				'status': status,
+				'description': description,
+				'date_approved': dateApproved
+			});
+		}
+	}
+	
+	if (hasApproved) {
+		//Redirect to the second page if any row has "Approved" Status
+		window.location.href = 'permits.html';
+		return; // Stop further execution
+	}
+	
+	try
+	{
+		const response = await fetch("http://127.0.0.1:8000/sign_works/plan_status/",
+		{
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(permitData), //Wrap the permit data in an object
+		});
+		
+		if (!response.ok)
+		{
+			const errorText = await response.text();
+			console.error('HTTP error details: ', response.status, errorText);
+			alert('Error uploading plans. Please try again');
+		}
+		else 
+		{
+			console.log('Plans data:', JSON.stringify(permitData));
+			alert('Plans uploaded successfully!');
+			location.reload(); // Refresh the page after successful uploads
+		}
+	}
+	catch (error)
+		{		
+			console.error('Error uploading plans:', error);
+			alert('Error uploading plans. Please try again.');
+		}
+}
+
+async function fetchJobs()
+{
+	try
+	{
+		const response = await fetch("http://127.0.0.1:8000/sign_works/job_id/");
+		const jobs = await response.json();
+		const jobTable = document.getElementById('jobTable').getElementsByTagName('tbody')[0];
+		
+		 jobs.forEach(job => {
+            const row = jobTable.insertRow();
+            row.insertCell(0).textContent = job.job_no;
+            row.insertCell(1).textContent = job.customer;
+            row.insertCell(2).innerHTML = `<input type="text" placeholder="Enter city">`;
+            row.insertCell(3).innerHTML = `<input type="date">`;
+			row.insertCell(4).innerHTML = `<input type="text" placeholder="Enter Planning Department">`;
+            row.insertCell(5).innerHTML = `
+                <select>
+                    <option value="Not Submitted">Not Submitted</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+					<option value="Not Approved">Not Approved</option>
+                </select>`;
+			row.insertCell(6).innerHTML = `<input type="text"placeholder="Enter Description" style="width: 250px;">`;
+            row.insertCell(7).innerHTML = `<input type="date">`;
+			row.insertCell(8).innerHTML = `<input type="checkbox">`;
+			
+			// Set background color based on Status
+			const statusCell = row.cells[5]; //Status column
+			const selectElement = statusCell.querySelector('select');
+			selectElement.addEventListener('change', function() {
+				const status = selectElement.value;
+				switch(status) {
+					case 'Approved':
+						statusCell.style.backgroundColor = 'green';
+						break;
+					case 'Pending':
+						statusCell.style.backgroundColor = 'yellow';
+						break;
+					case 'Not Approved':
+						statusCell.style.backgroundColor = 'red';
+						break;
+					case 'Not Submitted':
+						statusCell.style.backgroundColor = 'orange';
+						break;
+					default:
+						statusCell.style.backgroundColor = ''; //Default color
+				}
+			});
+        });
+    } 
+	catch (error) 
+	{
+        console.error('Error fetching jobs:', error);
+        alert('Error fetching jobs. Please try again.');
+    }
+}
+
+
+window.onload = fetchJobs;
+
+// Add an event listener to the city input fields
+document.addEventListener('input', function(event)
+{
+	const target = event.target;
+	if (target.tagName.toLowerCase() === 'input' && target.type === 'text' && target.parentElement.tagName.toLowerCase() === 'td')
+	{
+		const checkbox = target.closest('tr').querySelector('input[type="checkbox"]');
+		if (checkbox && !checkbox.checked)
+		{
+			checkbox.checked = true;
+		}
+	}
+});
+
+function filterTable() {
+	const input = document.getElementById('searchInput');
+	const filter = input.value.toUpperCase();
+	const table = document.getElementById('jobTable');
+	const rows = table.getElementsByTagName('tr');
+	
+	for(let i = 1; i < rows.length; i++) {
+		const cells = rows[i].getElementsByTagName('td');
+		let shouldShowRow = false;
+		
+		for (let j = 0; j < cells.length; j++) {
+			const cellText = cells[j].textContent || cells[j].innerText;
+			
+			if (cellText.toUpperCase().indexOf(filter) > -1) {
+				shouldShowRow = true;
+				break;
+			}
+		}
+		
+		rows[i].style.display = shouldShowRow ? '' : 'none';
+	}
+}
+
+function handleKeyPress(event) {
+	if (event.key == 'Enter') {
+		filterTable();
+	}
+}
+
+</script>
+
+</body>
+</html>
+			
+		

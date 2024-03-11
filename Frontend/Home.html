@@ -5,25 +5,88 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Home Page</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
-	<style>
-		h1 {text-align: center;}
-		p {text-align: center;}
-	</style>
+	<link rel="stylesheet" href="style.css">
+
 </head>
-<body style="font-family: Arial; background-color: #F5F5DC;">
-<h1 style="background-color: #87CEFA;">Signworks Dashboard: Monitor Customer Base and Planning Applications</h1>
+<body>
+	<header>
+		<h1>Signworks Dashboard: Monitor Customer Base and Planning Applications</h1>
+	</header>
 
-	<p><b><a href="view_customers.html" target="_blank">Client Directory</a>: Manage entire client list.</b></p><br><br>
-	<p><b><a href="CustomerList.html" target="_blank">Client Entry</a>: Insert new clients.</b></p><br><br>
-	<p><b><a href="edit_customer.html" target="_blank">Edit Client Details</a>: Modify and update client information.</b></p><br><br>
-	<p><b><a href="Permit_Status.html" target="_blank">Planning Application Status Admin</a>: Add planning application status.</b></p><br><br>
-	<p><b><a href="view_status.html" target="_blank">Monitor Planning Application Status</a>: Track and update planning application status.</b></p><br><br>
-	<p><b><a href="status_update.html" target="_blank">Update Planning Application Status</a>: Make a direct update to the Planning Application Status.</b></p><br><br>
+	<main>
+		<div class="customer">
+			<section class="card">
+		  		<img src="directory.png" alt="Directory Icon">
+		  		<h2>Client Directory</h2>
+		  		<p>Manage entire client list.</p>
+		  		<a href="view_customers.html" target="_blank">View</a>
+			</section>
 
+			<section class="card">
+				<img src="entry.png" alt="Client Entry Icon">
+				<h2>Client Entry</h2>
+				<p>Insert new clients.</p>
+				<a href="CustomerList.html" target="_blank">Insert</a>
+			</section>
 
+			<section class="card">
+				<img src="customeredit.png" alt="Edit Customer Icon">
+				<h2>Edit Client Details</h2>
+				<p>Modify and update client information.</p>
+				<a href="edit_customer.html" target="_blank">Edit</a>
+			</section>
+		</div>
 
+		<div class="plans">
+			<section class="card">
+				<img src="planstatusadmin.png" alt="Plans Admin Icon">
+				<h2>Planning Application Status Admin</h2>
+				<p>Add Planning Application status</p>
+				<a href="Plan_Status.html" target="_blank">Add</a>
+			</section>
+		  
+			<section class="card">
+				<img src="trackstatus.png" alt="Application Status Icon">
+				<h2>Monitor Planning Application Status</h2>
+				<p>Track and update planning application status</p>
+				<a href="view_plan_status.html" target="_blank">View</a>
+			</section>
 
-	
-	
+			<section class="card">
+				<img src="update.png" alt="Update Icon">
+				<h2>Update Planning Application Status</h2>
+				<p>Make a direct update to the Planning Application status.</p>
+				<a href="plan_status_update.html" target="_blank">Update</a>
+			</section>
+		</div>
+
+		<div class="permits">
+			<section class="card">
+				<img src="permits.png" alt="Add Permits Icon">
+				<h2>Building Permit Status Admin</h2>
+				<p>Add building permit application status.</p>
+				<a href="permits.html" target="_blank">Add</a>
+			</section>
+
+			<section class="card">
+				<img src="permitview.png" alt="View Permits Icon">
+				<h2>Monitor Building Permit Application Status</h2>
+				<p>Track building permit status</p>
+				<a href="view_permit_status.html" target="_blank">View</a>
+			</section>
+
+			<section class="card">
+				<img src="update.png" alt="Update Permits Icon">
+				<h2>Update Building Permit Status</h2>
+				<p>Make a direct update to building permit status</p>
+				<a href="permit_update.html" target="_blank">Update</a>
+			</section>
+		</div>
+
+	</main>
+	<footer>
+		<img src="C:\SignWorks\Frontend\signWorks_logo.png" alt="Company Logo">
+	</footer>
+		  
 </body>
 </html>

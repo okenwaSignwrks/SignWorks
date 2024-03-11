@@ -5,30 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planning Application Status Details</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
-    <style>
-        table {
-            border-collapse: collapse;
-        }
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
 </head>
 <body>
-    <h1>Planning Application Details</h1>
+    <header>
+        <h1>Planning Application Details</h1>
+    </header>
 
-    <table id="statusDetails">
-        <!-- Customer details will be displayed here dynamically -->
-    </table>
+    <div class="details">
+        <table id="statusDetails">
+            <!-- Customer details will be displayed here dynamically -->
+        </table>
 
-    <button onclick="redirectToEditPage()">Edit Status</button>
+        <button onclick="redirectToEditPage()">Edit Status</button>
+    </div>
 
     <script>
         // Retrieve selected customer details from local storage
@@ -42,24 +34,29 @@
             // Capitalize first letter
             return formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
         }
-
+		
         // Display customer details in a vertical table format
-        for (const [key, value] of Object.entries(selectedJob)) {
-            // Exclude '_id' field
-            if (key !== 'id') {
-                const row = jobDetailsTable.insertRow();
-                const columnNameCell = row.insertCell(0);
-                const valueCell = row.insertCell(1);
+		function populateTable() {
+			for (const [key, value] of Object.entries(selectedJob)) {
+				// Exclude '_id' field
+				if (key !== 'id') {
+					const row = jobDetailsTable.insertRow(jobDetailsTable.rows.length);
+					const columnNameCell = row.insertCell(0);
+					const valueCell = row.insertCell(1);
 
-                columnNameCell.textContent = formatColumnName(key);
-                valueCell.textContent = value;
-            }
-        }
+					columnNameCell.textContent = formatColumnName(key);
+					valueCell.textContent = value;
+				}
+			}
+		}
 
         // Function to redirect to edit page
         function redirectToEditPage() {
-            window.location.href = 'status_update.html';
+            window.location.href = 'plan_status_update.html';
         }
+		
+		// Call the function to populate the table
+		populateTable();
     </script>
 </body>
 </html>

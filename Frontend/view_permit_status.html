@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Permit Status</title>
+        <link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+    </head>
+    <body>
+        <header>
+            <h1>Permit Application Status</h1>
+        </header>
+
+        <div class="search">
+            <input type="text" id="searchInput" oninput="filterTable()" onkeyup="handleKeyPress(event)" placeholder="Search...">
+            <span class="search-icon"><i class="fa fa-search"></i></span>
+        </div>
+
+        <table border=2 id="statusTable">
+        <thead>
+            <tr>
+                <th style="background-color: lightskyblue;">Job No.</th>
+                <th style="background-color: lightskyblue;">Client</th>
+		        <th style="background-color: lightskyblue;">Date Submitted</th>
+		        <th style="background-color: lightskyblue;">Building Department</th>
+		        <th style="background-color: lightskyblue;">Status</th>
+                <th style="background-color: lightskyblue;">Description</th>
+		        <th style="background-color: lightskyblue;">Building Permit Number</th>
+		        <th style="background-color: lightskyblue;">Date Approved</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+        </table>
+
+        <script>
+            async function fetchData() {
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/sign_works/permits/");
+                    const responseData = await response.json();
+
+                    //Update tabled with fetched data
+                    const tableBody = document.getElementById('tableBody');
+                    responseData.forEach(permits => {
+                        const row = document.createElement('tr');
+                        row.addEventListener('click', function() {
+                            selectJob(permits);
+                        });
+                        row.insertCell(0).textContent = permits.job_no;
+                        row.insertCell(1).textContent = permits.client;
+                        row.insertCell(2).textContent = permits.date_submitted;
+                        row.insertCell(3).textContent = permits.building_dept;
+                        row.insertCell(4).textContent = permits.status;
+                        row.insertCell(5).textContent = permits.description;
+                        row.insertCell(6).textContent = permits.bldg_permit_no;
+                        row.insertCell(7).textContent = permits.date_approved;
+
+                        row.cells[2].style.width = "100px";
+                        row.cells[5].style.width = "250px";
+
+                        //Set background color based on status
+                        switch(permits.status) {
+                            case 'Approved':
+                                row.cells[4].style.backgroundColor = 'green';
+                                break;
+                            case 'Pending':
+                                row.cells[4].style.backgroundColor = 'yellow';
+                                break;
+                            case 'Not Approved':
+                                row.cells[4].style.backgroundColor = 'red';
+                                break;
+                            case 'Not Submitted':
+                                row.cells[4].style.backgroundColor = 'orange';
+                                break;
+                            default:
+                                row.cells[4].style.backgroundColor = ''; //Default color
+			            }
+                        tableBody.appendChild(row);
+                    });
+                }
+                catch (error) {
+                    console.log('Error retrieving data:', error);
+                }
+            }
+
+            function filterTable() {
+                const input = document.getElementById('searchInput');
+                const filter = input.value.toUpperCase();
+                const table = document.getElementById('statusTable');
+                const rows = table.getElementsByTagName('tr');
+
+                for (let i =1; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    let shouldShowRow = false;
+
+                    for (let j = 0; j < cells.length; j++) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+                        
+                        if (cellText.toUpperCase().indexOf(filter) > -1) {
+                            shouldShowRow = true;
+                            break;
+                        }
+                    }
+
+                    rows[i].style.display = shouldShowRow ? '' : 'none';
+                }
+            }
+
+            function handleKeyPress(event) {
+                if (event.key == 'Enter') {
+                    filterTable();
+                }
+            }
+
+            function selectJob(job) {
+                localStorage.setItem('selectedJob', JSON.stringify(job));
+                window.location.href = 'permit_details.html';
+            }
+
+            fetchData();
+        </script>
+    </body>
+</html>

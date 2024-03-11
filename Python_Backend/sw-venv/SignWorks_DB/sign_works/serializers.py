@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import CustomerList, Plans, Permits
 
+
 class CustomerListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerList

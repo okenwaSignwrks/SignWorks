@@ -4,9 +4,13 @@
 	<meta charset="utf-8">
 	<title>Sign Works Customers</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+	<link rel="stylesheet" href="style.css">
 </head>
-<body style="font-family: Arial; background-color: #F5F5DC;">
-<h1 style="background-color: #ADD8E6;">Insert Customer Information</h1>
+<body>
+	<header>
+		<h1>Insert Customer Information</h1>
+	</header>
+
 
 <table id="customerTable">
 	<tr><td style="background-color: #ADD8E6;">Date</td><td><input type="Date" id="date_recieved" placeholder="Choose a date"></td></tr>
@@ -53,7 +57,7 @@ async function upload_customer()
 	{
 		console.log('Data to be sent', Array.from(data.entries()));
 		
-		const response = await fetch("http://3.15.180.127:8000/sign_works/entry_list/",
+		const response = await fetch("http://127.0.0.1:8000/sign_works/entry_list/",
 		{
 			method: 'POST',
 			body: data,
@@ -68,6 +72,7 @@ async function upload_customer()
 		const responseData = await response.json();
 		console.log('Customer uploaded successfully!', responseData);
 		alert('Upload Successful!');
+		location.reload();
 		//const tableBody = document.getElementById('customerTable');
 		//tableBody.innerHTML = '';
 	}

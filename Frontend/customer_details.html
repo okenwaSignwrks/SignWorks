@@ -5,30 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Details</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body style="font-family: Arial; background-color: #F5F5DC;">
-    <h1 style="background-color: #ADD8E6;">Customer Details</h1>
 
-    <table id="customerDetails">
-        <!-- Customer details will be displayed here dynamically -->
-    </table>
+<body>
+    <header>
+        <h1>Customer Details</h1>
+    </header>
 
-    <button onclick="redirectToEditPage()">Edit Customer</button>
+    <div class="details">
+        <table id="customerDetails">
+            <!-- Customer details will be displayed here dynamically -->
+        </table>
+
+        <button onclick="redirectToEditPage()">Edit Customer</button>
+    </div>
 
     <script>
         // Retrieve selected customer details from local storage

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Update Building Permit Status</title>
+        <link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <header>
+            <h1>Update Building Permit Status</h1>
+        </header>
+
+        <div class="edit">
+            <form id="editForm">
+                <label for="job_no"><b>Job No:</b></label>
+                <input type="text" id="job_no"><br><br>
+
+                <label for="client"><b>Client:</b></label>
+                <input type="text" id="client"><br><br>
+
+                <label for="date_submitted"><b>Date Submitted</b></label>
+                <input type="date" id="date_submitted"><br><br>
+
+                <label for="building_dept"><b>Building Deptartment</b></label>
+                <input type="text" id="building_dept"><br><br>
+
+                <label for="status"><b>Status</b></label>
+                <select id="status">
+                    <option value="Not Submitted">Not Submitted</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Not Approved">Not Approved</option>
+                </select><br><br>
+
+                <label for="description" style="width: 100px;"><b>Description</b></label>
+                <input type="text" id="description"><br><br>
+
+                <label for="bldg_permit_no"><b>Building Permit No:</b></label>
+                <input type="text" id="bldg_permit_no"><br><br>
+
+                <label for="date_approved"><b>Date Approved</b></label>
+                <input type="date" id="date_approved"><br><br>
+
+                <button type="submit">Update</button>
+            </form>
+        </div>
+
+        <script>
+            //Retrieve selected job details from the local storage
+            const selectedJob = JSON.parse(localStorage.getItem('selectedJob'));
+
+            //Fill form fields with selected job details
+            document.getElementById('job_no').value = selectedJob.job_no;
+            document.getElementById('client').value = selectedJob.client;
+            document.getElementById('date_submitted').value = selectedJob.date_submitted;
+            document.getElementById('building_dept').value = selectedJob.building_dept
+            document.getElementById('status').value = selectedJob.status;
+            document.getElementById('description').value = selectedJob.description;
+            document.getElementById('bldg_permit_no').value = selectedJob.bldg_permit_no;
+            document.getElementById('date_approved').value = selectedJob.date_approved;
+
+            //Handle form submission
+            document.getElementById('editForm').addEventListener('submit', async function(event) {
+                event.preventDefault(); //Prevent default form submission
+
+                const jobNo = document.getElementById('job_no').value;
+                const Client = document.getElementById('client').value;
+                const dateSubmitted = document.getElementById('date_submitted').value;
+                const buildingDept = document.getElementById('building_dept').value;
+                const Status = document.getElementById('status').value;
+                const Description = document.getElementById('description').value;
+                const buildingPermitNo = document.getElementById('bldg_permit_no').value;
+                let dateApproved = document.getElementById('date_approved').value;
+
+                if (dateApproved.trim() === '') {
+                    dateApproved = null;
+                }
+                else {
+                    dateApproved = new Date(dateApproved).toISOString().split('T')[0];
+                }
+
+                const data = {
+                    job_no: jobNo,
+                    client: Client,
+                    date_submitted: dateSubmitted,
+                    building_dept: buildingDept,
+                    status: Status,
+                    description: Description,
+                    bldg_permit_no: buildingPermitNo,
+                    date_approved: dateApproved
+                };
+
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/sign_works/permits/" + jobNo + '/', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update permit status details.');
+                    }
+                    //Redirect user to view permit page after successful update
+                    window.location.href = 'view_permit_status.html';
+
+                    const responseData = await response.json();
+                    alert('Permit status updated successfully!');
+                } catch(error) {
+                    console.error('Error:', error);
+                    alert('Failed to update permit status. Please try again.');
+                }
+            });
+        </script>
+    </body>
+</html>

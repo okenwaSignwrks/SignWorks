@@ -4,12 +4,18 @@
 	<meta charset="utf-8">
 	<title>Client Directory</title>
 	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+	<header>
+		<h1>Client Directory</h1>
+	</header>
 
-<h1 style="background-color: #87CEFA;;">Client Directory</h1>
-
-<input type="text" id="searchInput" oninput="filterTable()" onkeyup="handleKeyPress(event)" placeholder="Search...">
+	<div class="search">
+		<input type="text" id="searchInput" oninput="filterTable()" onkeyup="handleKeyPress(event)" placeholder="Search...">
+		<span class="search-icon"><i class="fa fa-search"></i></span>
+	</div>
 
 <table style="width:100%" border=2 id="joblistTable">
 <thead>
@@ -34,7 +40,7 @@ async function fetchData()
 {
 	try
 	{
-		const response = await fetch("http://3.15.180.127:8000/sign_works/customer_list/");
+		const response = await fetch("http://127.0.0.1:8000/sign_works/customer_list/");
 		const responseData = await response.json();
 		
 		//Update table with fetched data

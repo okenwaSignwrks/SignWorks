@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Permit Details</title>
+        <link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <header>
+            <h1>Permit details</h1>
+        </header>
+        
+        <div class="details">
+            <table id="permitDetails">
+                <!-- Customer details will be displayed here dynamically-->
+            </table>
+
+            <button onclick="redirectToEditPage()">Edit Status</button>
+        </div>
+
+        <script>
+            //Retrieve selected customer details from local storage
+            const selectedJob = JSON.parse(localStorage.getItem('selectedJob'));
+            const jobDetailsTable = document.getElementById('permitDetails');
+
+            //Function to exclude '_id' field and format column names
+            function formatColumnName(name) {
+                // Convert camelCase to Title Case
+                const formattedName = name.replace(/([A-Z])/g, '$1').trim();
+                //Capitalize first Letter
+                return formattedName.charAt(0).toUpperCase() + formattedName.slice(1);
+            }
+            //Display customer details in a vertical table format
+            for (const [key, value] of Object.entries(selectedJob)) {
+                //Exclude '_id' field
+                if (key !== '_id') {
+                    const row = jobDetailsTable.insertRow();
+                    const columnNameCell = row.insertCell(0);
+                    const valueCell = row.insertCell(1);
+
+                    columnNameCell.textContent = formatColumnName(key);
+                    valueCell.textContent = value;
+                }
+            }
+
+            //Function to redirect user to edit page
+            function redirectToEditPage() {
+                window.location.href = 'permit_update.html';
+            }
+        </script>
+    </body>
+</html>

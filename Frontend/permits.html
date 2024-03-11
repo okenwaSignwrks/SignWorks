@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Permits</title>
+        <link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+
+    <body>
+        <header>
+            <h1>Manage Permit Status</h1>
+        </header>
+
+	    <div class="search">
+		    <input type="text" id="searchInput" oninput="filterTable()" onkeyup="handleKeyPress(event)" placeholder="Search...">
+		    <span class="search-icon"><i class="fa fa-search"></i></span>
+	    </div>
+
+        <div class="upload">
+            <table id="permitTable">
+                <thead>
+                    <tr>
+                        <th style="background-color: #ADD8E6;">Job No.</th>
+                        <th style="background-color: #ADD8E6;">Client</th>
+                        <th style="background-color: #ADD8E6;">Date Submitted</th>
+                        <th style="background-color: #ADD8E6;">Building Deptartment</th>
+                        <th style="background-color: #ADD8E6;">Status</th>
+                        <th style="background-color: #ADD8E6;">Description</th>
+                        <th style="background-color: #ADD8E6;">Building Permit Number</th>
+                        <th style="background-color: #ADD8E6;">Date Approved</th>
+                        <th style="background-color: #ADD8E6;">Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Permit fields will be inserted here dynamically-->
+                </tbody>
+            </table>
+            <button type="button" onclick="uploadPermit()">Upload Permits</button>
+        </div>
+
+        <script>
+            async function uploadPermit() {
+                const permitData = [];
+                const permitTable = document.getElementById('permitTable');
+                const rows = permitTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+                for (let i = 0; i < rows.length; i++) {
+                    const checkbox = rows[i].querySelector('input[type="checkbox"]');
+                    if (checkbox.checked) {
+                        const jobNo = rows[i].cells[0].textContent;
+                        const client = rows[i].cells[1].textContent;
+                        const dateSubmitted = rows[i].cells[2].getElementsByTagName('input')[0].value;
+                        const buildingDept = rows[i].cells[3].getElementsByTagName('input')[0].value;
+                        const status = rows[i].cells[4].getElementsByTagName('select')[0].value;
+                        const description = rows[i].cells[5].getElementsByTagName('input')[0].value;
+                        const buildingPermitNo = rows[i].cells[6].getElementsByTagName('input')[0].value;
+                        let dateApproved = rows[i].cells[7].getElementsByTagName('input')[0].value;
+
+                        //Check if dateApproved is empty
+                        if (dateApproved.trim() === '') {
+                            dateApproved = null;
+                        }
+                        else {
+                            dateApproved = new Date(dateApproved).toISOString.split('T')[0];
+                        }
+
+                        permitData.push({
+                            'job_no': jobNo,
+                            'client': client,
+                            'date_submitted': dateSubmitted,
+                            'building_dept': buildingDept,
+                            'status': status,
+                            'description': description,
+                            'bldg_permit_no': buildingPermitNo,
+                            'date_approved': dateApproved
+                        });
+
+                    }
+                }
+
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/sign_works/permits/", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(permitData), //Wrap the permit data in an object
+                    });
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('HTTP error details: ', response.status, errorText);
+                        alert('Error uploading permits. Please try again');
+                    }
+                    else {
+                        console.log('Permit data:', JSON.stringify(permitData));
+                        alert('Permits uploaded successfully!');
+                        location.reload(); // Refresh the page after successful uploads.
+                    }
+                }
+
+                catch (error) {
+                    console.error('Error uploading permits: ', error);
+                    alert('Error uploading permits. Please try again.');
+                }
+            }
+
+            async function fetchJobs() {
+                try {
+                    const response = await fetch("http://127.0.0.1:8000/sign_works/job_id/");
+                    const jobs = await response.json();
+                    const permitTable = document.getElementById('permitTable').getElementsByTagName('tbody')[0];
+
+                    jobs.forEach(job => {
+                        const row = permitTable.insertRow();
+                        row.insertCell(0).textContent = job.job_no;
+                        row.insertCell(1).textContent = job.customer;
+                        row.insertCell(2).innerHTML = `<input type="date">`;
+                        row.insertCell(3).innerHTML = `<input type="text" placeholder="Enter building department">`;
+                        row.insertCell(4).innerHTML = `
+                        <select>
+                            <option value="Not submiited">Not Submitted</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Not Approved">Not Approved</option>
+                        </select>`;
+                        row.insertCell(5).innerHTML = `<input type="text" placeholder="Enter description" style="width: 250px;"">`;
+                        row.insertCell(6).innerHTML = `<input type="text" placeholder="Enter bulding permit no.">`;
+                        row.insertCell(7).innerHTML = `<input type="date">`;
+                        row.insertCell(8).innerHTML = `<input type="checkbox">`;
+                    });
+                }
+                catch (error) {
+                    console.error('Error finding job information:', error);
+                    alert('Error finding job information. Please try again.');
+                }
+            }
+
+            window.onload = fetchJobs;
+
+            //Add an event listener to the building department input fields
+            document.addEventListener('input', function(event) {
+                const target = event.target;
+                if (target.tagName.toLowerCase() === 'input' && target.type == 'text' && target.parentElement.tagName.toLowerCase() === 'td') {
+                    const checkbox = target.closest('tr').querySelector('input[type="checkbox"]');
+                    if (checkbox && !checkbox.checked) {
+                        checkbox.checked = true;
+                    }
+                }
+            }); //Add color code to jobs that are approved. disable input box for jobs that are approved.
+
+            function filterTable() {
+                const input = document.getElementById('searchInput');
+                const filter = input.value.toUpperCase();
+                const table = document.getElementById('permitTable');
+                const rows = table.getElementsByTagName('tr');
+
+                for (let i = 1; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    let shouldShowRow = false;
+
+                    for (let j = 0; j < cells.length; j++) {
+                        const cellText = cells[j].textContent || cells[j].innerText;
+
+                        if (cellText.toUpperCase().indexOf(filter) > -1) {
+                            shouldShowRow = true;
+                            break;
+                        }
+                    }
+                    rows[i].style.display = shouldShowRow ? '' : 'none'
+                }
+            }
+
+            function handleKeyPress(event) {
+                if(event.key == 'Enter') {
+                    filterTable();
+                }
+            }
+        </script>
+    </body>
+</html>

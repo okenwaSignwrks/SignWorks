@@ -3,16 +3,14 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
-from .models import CustomerList, Plans #Permits
-from .serializers import CustomerListSerializer, PlansSerializer
+from .models import CustomerList, Plans, Permits
+from .serializers import CustomerListSerializer, PlansSerializer, PermitsSerializer
 
 @api_view(['GET'])
 def customer_list(request): #Views to just view customers.
     customers = CustomerList.objects.all()
     serializer = CustomerListSerializer(customers, many=True)
     return Response(serializer.data)
-
-
 
 @api_view(['POST']) # Used to enter a customer to the database
 def entrylist(request):
@@ -59,9 +57,10 @@ def plan_status_view(request):
             'job_no': state.job_no,
             'client': state.client,
             'city': state.city,
-            'planning_dept': state.planning_dept,
             'date_submitted': state.date_submitted,
+            'planning_dept': state.planning_dept,
             'status': state.status,
+            'description': state.description,
             'date_approved': state.date_approved,
         })
     serializer = PlansSerializer(data=status_data, many=True)
@@ -137,6 +136,68 @@ def plan_status_update(request, job_no):
         print(status_serializer.errors)
         print(status_serializer.error_messages)
         return Response({'message': 'Invalid Request'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+#To enter permit information
+@api_view(['POST', 'GET', 'PUT'])
+def permits(request, job_no=None):
+    if request.method == 'POST':
+        permit_data = PermitsSerializer(data=request.data, many=True)
+        if permit_data.is_valid():
+            print("Permit is valid")
+            permit_data.save()
+        else:
+            print("Permit is not valid")
+            print(permit_data.errors)
+            print(permit_data.error_messages)
+        return Response(permit_data.data)
+
+    elif request.method == 'GET':
+        if job_no is not None:
+            try:
+                permit_instance = Permits.objects.get(job_no=job_no)
+                serializer = PermitsSerializer(permit_instance)
+                return Response(serializer.data)
+            except Permits.DoesNotExist:
+                return Response({'message': 'Job number not found'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            permit_status = Permits.objects.all()
+            status_data = []
+            for permit in permit_status:
+                status_data.append({
+                    'job_no': permit.job_no,
+                    'client': permit.client,
+                    'date_submitted': permit.date_submitted,
+                    'building_dept': permit.building_dept,
+                    'status': permit.status,
+                    'description': permit.description,
+                    'bldg_permit_no': permit.bldg_permit_no,
+                    'date_approved': permit.date_approved,
+                })
+            serializer = PermitsSerializer(data=status_data, many=True)
+            serializer.is_valid()
+            return Response(serializer.data)
+
+
+    elif request.method == 'PUT':
+        permit_data = request.data
+        if job_no is None:
+            return Response({'message': 'Job number is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            permit_instance = Permits.objects.get(job_no=job_no)
+        except Permits.DoesNotExist:
+            return Response({'message': 'Job number not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = PermitsSerializer(permit_instance, data=permit_data)
+        if serializer.is_valid():
+            print("Valid Serializer")
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
 

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Plan Status</title>
+	<link rel="icon" type="image/x-icon" href="signWorks_logo.png">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+	<header>
+		<h1>Planning Application Status</h1>
+	</header>
+
+	<div class="search">
+		<input type="text" id="searchInput" oninput="filterTable()" onkeyup="handleKeyPress(event)" placeholder="Search...">
+		<span class="search-icon"><i class="fa fa-search"></i></span>
+	</div>
+
+
+<table border=2 id="statusTable">
+<thead>
+	<tr>
+		<th style="background-color: lightskyblue;">Job No.</th>
+		<th style="background-color: lightskyblue;">Client</th>
+		<th style="background-color: lightskyblue;">City</th>
+		<th style="background-color: lightskyblue;">Date Submitted</th>
+		<th style="background-color: lightskyblue;">Planning Department</th>
+		<th style="background-color: lightskyblue;">Status</th>
+		<th style="background-color: lightskyblue;">Description</th>
+		<th style="background-color: lightskyblue;">Date Approved</th>
+	</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+
+<script>
+
+async function fetchData()
+{
+	try
+	{
+		const response = await fetch("http://127.0.0.1:8000/sign_works/plan_status_view/");
+		const responseData = await response.json();
+		
+		//Update table with fetched data
+		const tableBody = document.getElementById('tableBody');
+		responseData.forEach(plans =>
+		{
+			const row = document.createElement('tr');
+			row.addEventListener('click', function()
+			{
+				selectJob(plans);
+			});
+			//const row = statusTable.insertRow(-1);
+			row.insertCell(0).textContent = plans.job_no;
+			row.insertCell(1).textContent = plans.client;
+			row.insertCell(2).textContent = plans.city;
+			row.insertCell(3).textContent = plans.date_submitted;
+			row.insertCell(4).textContent = plans.planning_dept;
+			row.insertCell(5).textContent = plans.status;
+			row.insertCell(6).textContent = plans.description;
+			row.insertCell(7).textContent = plans.date_approved;
+			row.cells[3].style.width ="100px";
+			row.cells[4].style.width ="300px";
+			row.cells[6].style.width = "250px";
+			
+			//Set background color based on status
+			switch(plans.status) {
+				case 'Approved':
+					row.cells[5].style.backgroundColor = 'green';
+					break;
+				case 'Pending':
+					row.cells[5].style.backgroundColor = 'yellow';
+					break;
+				case 'Not Approved':
+					row.cells[5].style.backgroundColor = 'red';
+					break;
+				case 'Not Submitted':
+					row.cells[5].style.backgroundColor = 'orange';
+					break;
+				default:
+					row.cells[5].style.backgroundColor = ''; //Default color
+			}
+			
+			tableBody.appendChild(row);
+		});
+	}
+	catch (error)
+	{
+		console.error('Error:', error);
+		console.log('Error retrieving data:', error);
+	}
+}
+
+function filterTable()
+{
+	const input = document.getElementById('searchInput');
+	const filter = input.value.toUpperCase();
+	const table = document.getElementById('statusTable');
+	const rows = table.getElementsByTagName('tr');
+	
+	for (let i = 1; i < rows.length; i++)
+	{
+		const cells = rows[i].getElementsByTagName('td');
+		let shouldShowRow = false;
+		
+		for (let j = 0; j < cells.length; j++)
+		{
+			const cellText = cells[j].textContent || cells[j].innerText;
+			
+			if (cellText.toUpperCase().indexOf(filter) > -1)
+			{
+				shouldShowRow = true;
+				break;
+			}
+		}
+		
+		rows[i].style.display = shouldShowRow ? '' : 'none';
+	}
+}
+
+function handleKeyPress(event)
+{
+	if (event.key == 'Enter')
+	{
+		filterTable();
+	}
+}
+
+
+function selectJob(job)
+{
+	localStorage.setItem('selectedJob', JSON.stringify(job));
+	window.location.href = 'plan_status_details.html';
+}
+
+
+fetchData();
+
+		
+//Add a reload capability that leads to this page after submitting a job
+
+</script>
+</body>
+</html>
+			
+		
+		
+		
+		

@@ -1,0 +1,150 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: lightgoldenrodyellow; 
+  }
+  
+  header {
+    background-color: rgb(36, 12, 144); 
+    color: white; /* White text */
+    padding: 1rem;
+    text-align: center;
+  }
+
+  footer img {
+    width: 200px;
+    height: auto;
+    margin-right: 10px;
+  }
+  
+  main {
+    display: flex; /* Arrange cards horizontally */
+    flex-direction: column;
+    justify-content: space-around; /* Distribute cards evenly */
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .customer, .plans, .permits {
+    display: flex;
+    /*flex-wrap: wrap; /* Allow cards to wrap onto multiple lines */
+    justify-content: space-around;
+    width: auto;
+    margin-bottom: 1rem; /* Add some space between rows */
+  }
+
+  .card {
+    background-color: #fff; /* White card background */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+    width: 200px; /* Adjust card width as needed */
+  }
+  
+  .card img {
+    display: block; /* Display image as a block element */
+    margin: 0 auto; /* Center image horizontally */
+    width: 50px; /* Adjust image size as needed */
+  }
+  
+  .card h2 {
+    font-size: 1.2rem; /* Adjust heading size as needed */
+    margin: 0.5rem 0;
+  }
+  
+  .card p {
+    font-size: 0.9rem; /* Adjust paragraph size as needed */
+    margin: 0.8rem 0;
+  }
+  
+  .card a {
+    background-color: rgb(36, 12, 144); /* Same color as header */
+    color: white; /* White text */
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+  }
+  
+  .card a:hover {
+    background-color: #29323a; /* Darken background on hover */
+  }
+
+  .edit{
+    margin-top: 20px;
+  }
+
+  .edit button, .details button, .upload button {
+    height: 35px;
+    width: 150px;
+  }
+
+  .search {
+    position: relative;
+    top: 0; /* Adjust the top position */
+    right: 0; /* Position the container to the right */
+    margin-right: 20px;
+    background-color: antiquewhite;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    z-index: 999; /* Ensures it's on top of other elements. */
+  }
+
+  .search input {
+    height: 30px;
+    padding-right: 30px; /* Add space for the icon */
+    box-sizing: border-box; /* Include padding and border */
+  }
+
+  .search-icon {
+    position: relative;
+    top: 0; /*Align vertically*/
+    right: 0px; /* Distance from input */
+    transform: translateY(-50%); /* Center vertically */
+  }
+
+  .search-icon i {
+    color: #333;
+    cursor: pointer; /*Change cursor to pointer on hover */
+  }
+
+  #joblistTable {
+    width: 100%; /* Fill the entire width of the viewport */
+    margin-top: 2px; /* Add space for the search bar */
+    border-collapse: collapse; /* Collapse border spacing */
+  }
+
+  #joblistTable th,
+  #joblisTable td {
+    border: 2px solid lightblue;
+    padding: 8px;
+    text-align: left;
+  }
+
+  #statusTable {
+    width: 100%; /* Fill the entire width of the viewport */
+    margin-top: 2px; /* Add space for the search bar */
+    border-collapse: collapse; /* Collapse border spacing */
+  }
+
+  #statusTable th,
+  #statusTable td {
+    border: 2px solid lightblue;
+    padding: 8px;
+    text-align: left;
+  }
+
+  #statusDetails, #permitDetails, #customerDetails, #jobTable, #permitTable {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #statusDetails th, #permitDetails th, #customerDetails th,
+  #statusDetails td, #permitDetails td, #customerDetails td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  /* #F5F5DC;" */

@@ -18,6 +18,7 @@ class Status(models.TextChoices):
     approved = 'Approved'
     pending = 'Pending'
     not_submitted = 'Not Submitted'
+    not_pproved = 'Not Approved'
 
 class Plans(models.Model):
     job_no = models.IntegerField(primary_key=True)
@@ -26,6 +27,7 @@ class Plans(models.Model):
     date_submitted = models.DateField(null=True, blank=True) #Date_Filed
     planning_dept = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=20, choices=Status.choices)
+    description = models.CharField(max_length=200, blank=True, null=True)
     date_approved = models.DateField(null=True, blank=True)
 
 class Permits(models.Model):
@@ -34,7 +36,9 @@ class Permits(models.Model):
     date_submitted = models.DateField(null=True, blank=True)
     building_dept = models.CharField(max_length=100, blank=True, null=True)
     status = models.CharField(max_length=20, choices=Status.choices)
-    Bldg_permit_no = models.CharField(max_length=35, blank=True, null=True)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    bldg_permit_no = models.CharField(max_length=35, blank=True, null=True)
+    date_approved = models.DateField(null=True, blank=True)
 
 
 
